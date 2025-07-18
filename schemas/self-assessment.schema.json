@@ -1,0 +1,96 @@
+{
+  "$id": "self-assessment.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "selfAssessment": {"$ref": "#/definitions/selfAssessment"}
+  },
+  "definitions": {
+    "selfAssessment": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "description": {"$ref": "saif.schema.json#/definitions/utils/text"},
+        "personas": {
+          "type": "object",
+          "properties": {
+            "text": {"$ref": "saif.schema.json#/definitions/utils/text"},
+            "multipleChoice": {"type": "boolean"},
+            "answers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {"$ref": "personas.schema.json#/definitions/persona/properties/id"},
+                  "value": {
+                    "type": "integer",
+                    "enum": [1, 2]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "questions": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/selfAssessment/definitions/question"}
+        }
+      },
+
+      "definitions": {
+        "question": {
+          "type": "object",
+          "properties": {
+            "id": {"type": "string"},
+            "text": {"$ref": "saif.schema.json#/definitions/utils/text"},
+            "answers": {"$ref": "#/definitions/selfAssessment/definitions/answers"},
+            "personas": {
+              "type": "array",
+              "items": {"$ref": "personas.schema.json#/definitions/persona/properties/id"}
+            },
+            "risks": {
+              "type": "array",
+              "items": {"$ref": "risks.schema.json#/definitions/risk/properties/id"}
+            },
+            "relevance": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/selfAssessment/definitions/answers/items/properties/label"}
+            }
+          }
+        },
+
+        "answers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": ["Yes", "No", "Maybe"]
+              },
+              "value": {
+                "type": "integer",
+                "enum": [1, 2, 3]
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "utils": {
+      "text": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {"type": "string"},
+            {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          ]
+        }
+      }
+    }
+  }
+}

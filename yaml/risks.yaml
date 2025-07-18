@@ -1,0 +1,829 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+title: Risks
+description:
+- >
+  The following section describes each risk in the SAIF Map, including causes,
+  impact, potential mitigations, and examples of real-world exploitation.
+- >
+  Each risk is mapped to the relevant controls that can be enacted, and is associated
+  with the Model Creator, the Model Consumer, or both, based on who is responsible
+  for enacting the controls that can mitigate the risk:
+- - 'Model Creator: Those who train or develop AI models for use by themselves
+    or others.'
+  - 'Model Consumer: Those who use AI models to build AI-powered products and applications.'
+- >
+  This mapping does not specify controls related to Assurance and Governance functions,
+  since Assurance and Governance controls should be applied to all risks, by all
+  parties, across the AI development lifecycle.
+- For a complete list of controls, see the Control descriptions.
+risks:
+- id: DP
+  title: Data Poisoning
+  shortDescription:
+  - >
+    Altering data sources used to train the model. In terms of impact, Data Poisoning
+    is comparable to modifying the logic of an application to change its behavior.
+  longDescription:
+  - >
+    Altering data sources used during training or retraining (by deleting or modifying
+    existing data as well as injecting adversarial data) to degrade model performance,
+    skew results towards a specific outcome, or create hidden backdoors.
+  - >
+    Data Poisoning can be considered comparable to maliciously modifying the logic
+    of an application to change its behavior.
+  - >
+    Data Poisoning attacks can happen during training or tuning, while data is
+    held in storage, or even before the data is ingested into an organization.
+    For example, foundation models are often trained on distributed web-scale datasets
+    crawled from the Internet. An attack could <a href="https://arxiv.org/abs/2302.10149"
+    target="_blank" rel="noopener">indirectly pollute a public data source</a>
+    that is eventually ingested. A malicious or compromised insider could also
+    more directly poison the datasets while held in storage or during the training
+    process, by submitting poisoned prompt-response examples for inclusion in the
+    tuning data, as demonstrated in a 2023 research paper on <a href="https://arxiv.org/pdf/2305.00944.pdf">poisoning
+    models during instruction tuning</a>.
+  - >
+    Data Poisoning attacks can also install backdoors by specific alterations of
+    the training data. Backdoored models would continue to function normally, but
+    alternate behaviors could be triggered under certain conditions to make the
+    model behave maliciously.
+  personas:
+  - personaModelCreator
+  controls:
+  - controlTrainingDataSanitization
+  - controlSecureByDefaultMLTooling
+  - controlModelAndDataIntegrityManagement
+  - controlModelAndDataAccessControls
+  - controlModelAndDataInventoryManagement
+  examples:
+  - >
+    Researchers showed that they could <a href="https://arxiv.org/abs/2302.10149"
+    target="_blank" rel="noopener">indirectly pollute popular data sources used
+    for training models</a> with minimal cost.
+  tourContent:
+    introduced:
+    - >
+      Data Poisoning poses a risk throughout the data lifecycle. Data can be poisoned
+      before it is ingested, during processing or training, or while the data is
+      in storage. This makes it a critical concern across all data handling systems.
+    exposed:
+    - >
+      Data Poisoning is exposed during development in the data filtering and processing
+      steps or the training, tuning, and evaluation stages. It’s also exposed
+      in the model itself, when it produces inaccurate results, malicious outputs,
+      or unexpected behavior.
+    mitigated:
+    - >
+      Proactive mitigation against Data Poisoning happens early in development.
+      This includes data sanitization, secure systems and access controls, and
+      mechanisms to ensure data and model integrity.
+- id: UTD
+  title: Unauthorized Training Data
+  shortDescription:
+  - >
+    Using unauthorized data for model training. Using a model trained with Unauthorized
+    Training Data might lead to legal or ethical challenges.
+  longDescription:
+  - Training a model using data that is not authorized to be used for that model.
+  - >
+    A model trained or fine tuned on unauthorized data could pose legal or ethical
+    challenges. Unauthorized Training Data may include any data that violates
+    policies, contracts, or regulations. Examples are user data that does not have
+    appropriate user consent, unlicensed copyrighted data, or legally restricted
+    data.
+  personas:
+  - personaModelCreator
+  controls:
+  - controlTrainingDataSanitization
+  - controlTrainingDataManagement
+  examples:
+  - >
+    In 2023, <a href="https://aibusiness.com/ml/spotify-takes-down-thousands-of-ai-generated-tracks"
+    target="_blank" rel="noopener">Spotify removed multiple AI-generated tracks</a>
+    that were generated by a model trained on unlicensed data.
+  tourContent:
+    introduced:
+    - >
+      Unauthorized Training Data is introduced early in development if not properly
+      filtered out during data ingestion, data processing, and model evaluation
+      during training.
+    exposed:
+    - >
+      The risk is exposed during development, through data filtering and processing
+      steps or training, tuning, and evaluation. It is also exposed during model
+      use, when the model may produce inferences based on data it shouldn’t have
+      access to.
+    mitigated:
+    - >
+      Mitigations for this risk start early, with careful data selection, filtering,
+      and evaluation during training to catch any lingering issues.
+- id: MST
+  title: Model Source Tampering
+  shortDescription:
+  - >
+    Tampering with the model's code or data. Model Source Tampering is similar
+    to tampering with traditional software code, and can create vulnerabilities
+    or unintended behavior.
+  longDescription:
+  - >
+    Tampering with the model’s source code, dependencies, or weights, either
+    by supply chain attacks or insider attacks.
+  - >
+    Similar to tampering with traditional software code, Model Source Tampering
+    can introduce vulnerabilities or unexpected behaviors.
+  - >
+    Since model source code is used in the process of developing the model, code
+    modifications can affect model behavior. As with traditional code, attacks
+    on a dependency can affect the program that relies on that dependency, so the
+    risks in this area are transitive, potentially through many layers of a model
+    code’s dependency chain.
+  - >
+    Another method of Model Source Tampering is model architecture backdoors, which
+    are <a href="https://arxiv.org/pdf/2402.06957.pdf">backdoors embedded within
+    the definition of the neural network architecture</a>. Such backdoors can
+    survive full retraining of a model.
+  personas:
+  - personaModelCreator
+  controls:
+  - controlSecureByDefaultMLTooling
+  - controlModelAndDataIntegrityManagement
+  - controlModelAndDataAccessControls
+  - controlModelAndDataInventoryManagement
+  examples:
+  - >
+    The nightly build of <a href="https://pytorch.org/blog/compromised-nightly-dependency/">PyTorch
+    package was subjected to a supply chain attack</a> (specifically, a dependency
+    confusion attack that installed a compromised dependency that ran a malicious
+    binary).
+  tourContent:
+    introduced:
+    - >
+      Model Source Tampering is a risk that’s introduced when model code, training
+      frameworks, or model weights are not hardened against supply chain attacks
+      and tampering.
+    exposed:
+    - >
+      This risk is exposed in the model frameworks and code components, if the
+      tampering is discovered at the source. Otherwise, the risk is exposed in
+      the model, through its modified behavior during use.
+    mitigated:
+    - >
+      Safeguard against this risk by employing robust access controls and integrity
+      management for model code and weights, comprehensive inventory tracking
+      to monitor and verify models and code throughout systems, and secure-by-default
+      infrastructure tools.
+- id: EDH
+  title: Excessive Data Handling
+  shortDescription:
+  - >
+    Unauthorized collection, retention, processing, or sharing of user data. Excessive
+    Data Handling may lead to policy and legal challenges.
+  longDescription:
+  - >
+    Collection, retention, processing, or sharing of user data beyond what is allowed
+    by relevant policies.
+  - Excessive Data Handling can create both policy and legal challenges.
+  - >
+    In the context of models, user data might include user queries, text inputs
+    and interactions, personalizations and preferences, and models derived from
+    such data.
+  personas:
+  - personaModelCreator
+  controls:
+  - controlUserDataManagement
+  examples:
+  - >
+    <a href="https://www.forbes.com/sites/siladityaray/2023/05/02/samsung-bans-chatgpt-and-other-chatbots-for-employees-after-sensitive-code-leak/"
+    target="_blank" rel="noopener">Samsung banned usage of ChatGPT</a> after
+    discovering private code source has leaked via using it in GenAI prompts.
+  tourContent:
+    introduced:
+    - >
+      The risk of Excessive Data Handling is introduced when data sources lack
+      proper metadata tagging for effective management or when model and data storage
+      infrastructure isn't designed to address data lifecycle concerns.
+    exposed:
+    - >
+      This risk is exposed in both the model and in storage components, leading
+      to data retention or usage beyond permissible limits.
+    mitigated:
+    - >
+      Mitigate this risk with data filtering and processing, along with automation
+      for data archiving, deletion, or issuing alerts for models trained with outdated
+      data.
+- id: MXF
+  title: Model Exfiltration
+  shortDescription:
+  - >
+    Theft of a model. Similar to stealing code, this threat has both intellectual
+    property and security implications.
+  longDescription:
+  - >
+    Unauthorized appropriation of an AI model, for replicating functionality or
+    to extract intellectual property.
+  - >
+    Similar to stealing code, this threat has intellectual property, security,
+    and privacy implications.
+  - >
+    For example, someone could hack into a cloud environment and steal a generative
+    AI model; the model size when serialized is fairly modest and not a major obstacle
+    for this. Models, and related data such as weights, are also at risk of theft
+    in the internal development, build, deployment, and production environments
+    by insiders and external attackers that have taken over privileged insider
+    accounts.
+  - >
+    These risks also extend to on-device models, where an attacker has access to
+    hardware.
+  - This risk is distinct from the related <a href="#MRE">Model Reverse Engineering</a>.
+  personas:
+  - personaModelCreator
+  - personaModelConsumer
+  controls:
+  - controlModelAndDataInventoryManagement
+  - controlModelAndDataAccessControls
+  - controlSecureByDefaultMLTooling
+  examples:
+  - >
+    <a href="https://www.theverge.com/2023/3/8/23629362/meta-ai-language-model-llama-leak-online-misuse"
+    target="_blank" rel="noopener">Meta's Llama model was leaked online</a>,
+    bypassing Meta's license acceptance review process.
+  tourContent:
+    introduced:
+    - >
+      Model Exfiltration is introduced when storage or serving infrastructure lacks
+      adequate security against attacks.
+    exposed:
+    - >
+      This risk is exposed if attackers target vulnerabilities in serving or storage
+      systems to steal model code or weights.
+    mitigated:
+    - >
+      Mitigate this risk by hardening both storage and serving systems to prevent
+      unauthorized access and protect against model theft.
+- id: MDT
+  title: Model Deployment Tampering
+  shortDescription:
+  - >
+    Unauthorized changes to model deployment components. Model Deployment Tampering
+    can result in changes to model behavior.
+  longDescription:
+  - >
+    Unauthorized modification of components used for deploying a model, whether
+    by tampering with the source code supply chain or exploiting known vulnerabilities
+    in common tools.
+  - Such modifications can result in changes to model behavior.
+  - >
+    One type of Model Deployment Tampering is candidate model modification where
+    the attacker is modifying the deployment workflow or processes to maliciously
+    alter the way the model operates post-deployment.
+  - >
+    A second type is compromise of the model serving infrastructure. For example,
+    it was reported that <a href="https://thehackernews.com/2023/10/warning-pytorch-models-vulnerable-to.html">PyTorch
+    models were vulnerable to remote code execution</a> due to multiple critical
+    security flaws in the <strong>TorchServe</strong> tool that is widely used
+    for serving the models. This is an attack on a serving infrastructure for PyTorch,
+    TorchServe, whereas the <a href="https://pytorch.org/blog/compromised-nightly-dependency/">PyTorch
+    example of Model Source Tampering</a> was about a supply chain attack on dependency
+    code for PyTorch itself.
+  personas:
+  - personaModelCreator
+  - personaModelConsumer
+  controls:
+  - controlSecureByDefaultMLTooling
+  examples:
+  - >
+    <a href="https://www.wiz.io/blog/wiz-and-hugging-face-address-risks-to-ai-infrastructure#what-did-we-find-11"
+    target="_blank" rel="noopener">Researchers discovered that models on HuggingFace
+    were using a shared infrastructure for inference</a>, which allowed a malicious
+    model to tamper with any other model.
+  tourContent:
+    introduced:
+    - >
+      The risk of Model Deployment Tampering is introduced within the model serving
+      components, specifically when the serving infrastructure is vulnerable to
+      manipulation.
+    exposed:
+    - >
+      This risk is exposed if attackers tamper with production models within the
+      model serving component.
+    mitigated:
+    - >
+      Mitigation focuses on hardening the model serving infrastructure with secure-by-default
+      tooling.
+- id: DMS
+  title: Denial of ML Service
+  shortDescription:
+  - >
+    Overloading ML systems with resource-intensive queries. Like traditional DoS
+    attacks, Denial of ML Service can reduce availability of or entirely disrupt
+    a service.
+  longDescription:
+  - >
+    Reducing the availability of ML systems and denying service by issuing queries
+    that take too many resources.
+  - >
+    Examples of attacks include traditional denial of service or spamming a system
+    with abusive material to overload automated or manual review processes. If
+    an API-gated model does not have appropriate rate limiting or load balancing,
+    the repeated queries can take the model offline, making it unavailable to other
+    users.
+  - >
+    There are also <a href="https://arxiv.org/pdf/2006.03463.pdf">energy-latency
+    attacks</a>: attackers can carefully craft “sponge examples” (also known
+    as queries of death), which are inputs designed to maximize energy consumption
+    and latency, pushing ML systems towards their worst-case performance. Adversaries
+    might use their own tools to accelerate construction of such sponge examples.
+    These attacks are especially relevant for on-device models, since the increased
+    energy consumption can drain batteries and make the model unavailable.
+  personas:
+  - personaModelConsumer
+  controls:
+  - controlApplicationAccessManagement
+  examples:
+  - >
+    Researchers have proven how slight perturbation to images <a href="https://arxiv.org/abs/2205.13618"
+    target="_blank" rel="noopener">can cause denial of service on object detection
+    models</a>.
+  tourContent:
+    introduced:
+    - >
+      The risk of Denial of ML Service arises in the application component when
+      a model is exposed to excessive access. Additionally, some types of Denial
+      of ML Service (such as energy-latency attacks) stem from the fundamental
+      functioning of the model itself.
+    exposed:
+    - >
+      This risk is exposed during application use, when attackers either overwhelm
+      the model with excessive calls or use carefully crafted "sponge examples"
+      that take advantage of model weaknesses to degrade performance.
+    mitigated:
+    - >
+      Mitigation occurs at the application level, using input filtering and employing
+      rate limiting and load balancing to control the volume of calls to the model.
+- id: MRE
+  title: Model Reverse Engineering
+  shortDescription:
+  - >
+    Recreating a model by analyzing its inputs, outputs, and behaviors. A reverse
+    engineer model can be used to create imitation products or adversarial attacks.
+  longDescription:
+  - >
+    Cloning or recreating a model by analyzing a model's inputs, outputs, and behaviors.
+  - >
+    The stolen or cloned model can be used for building imitation products or developing
+    <a href="https://arxiv.org/abs/2004.15015">adversarial attacks</a> on the
+    original model.
+  - >
+    If a model API does not have rate limits, one method of Model Reverse Engineering
+    is repeatedly calling the API to gather responses in order to create a dataset
+    of thousands of input/output pairs from a target LLM. This dataset can be leveraged
+    to reconstruct a copycat or distilled model more cheaply than developing the
+    original foundation model.
+  - >
+    These risks also extend to on-device models, where an attacker has access to
+    hardware. See also <a href="#MXF">Model Exfiltration</a>.
+  personas:
+  - personaModelConsumer
+  controls:
+  - controlApplicationAccessManagement
+  examples:
+  - >
+    A Stanford University research team created <a href="https://crfm.stanford.edu/2023/03/13/alpaca.html"
+    target="_blank" rel="noopener">Alpaca 7B</a>, a model fine-tuned from
+    the LLaMA 7B model based on 52,000 instruction-following examples.
+  tourContent:
+    introduced:
+    - >
+      The risk of Model Reverse Engineering arises within the application component
+      when excessive access to the model is granted for queries.
+    exposed:
+    - >
+      This risk is exposed if attackers send excessive queries to the model and
+      leverage the responses to reverse engineer its weights.
+    mitigated:
+    - >
+      Mitigate this risk with rate limiting within the application API or using
+      other protective measures at the application level to prevent excessive
+      model access.
+- id: IIC
+  title: Insecure Integrated Component
+  shortDescription:
+  - >
+    Software vulnerabilities that can be leveraged to compromise AI models. Insecure
+    Integrated Component can lead to privacy and security concerns, as well as
+    potential ethical and legal challenges.
+  longDescription:
+  - >
+    Vulnerabilities in software interacting with AI models, such as a plugin, library,
+    or application, that can be leveraged by attackers to gain unauthorized access
+    to models, introduce malicious code, or compromise system operations.
+  - >
+    Given the level of autonomy expected to be granted to agent/plugins and applications,
+    insecure integrated components represent a broad swath of threats to user trust
+    and safety, privacy and security concerns, and ethical and legal challenges.
+  - 'This risk can come from manipulation of both inputs to and outputs from integrations:'
+  - - >
+      Manipulation of <strong>model output</strong> to include malicious instructions
+      fed as <strong>input to the integrated component or system</strong>. For
+      example, a plugin that accepts freeform text instead of structured and validated
+      input could be exploited to construct inputs that cause the plugin to behave
+      maliciously. Likewise, a plugin that accepts input without authentication
+      and authorization can be exploited since it trusts input as coming from an
+      authorized user.
+    - >
+      Manipulation of the <strong>output from an integrated component or system</strong>
+      that is fed as <strong>input to a model</strong>. For example, when a
+      plugin calls other systems, especially 3rd party services, sites, or plugins,
+      and uses content obtained from those to construct output to a model, opening
+      up potential for indirect prompt injection. A similar case exists for an
+      integrated application that calls another service and uses content from that
+      service to construct an input to a model.
+  - >
+    Insecure Integrated Component is related to <a href="#PIJ">Prompt Injection</a>
+    but these are different. Although attacks exploiting an Insecure Integrated
+    Component often involve prompt injection, those could be also done via other
+    means such as Poisoning and Evasion. In addition, prompt injection is possible
+    even when the integrated components are secure.
+  personas:
+  - personaModelConsumer
+  controls:
+  - controlAgentPluginPermissions
+  examples:
+  - >
+    By uploading a malicious Alexa skill / Google action (plugins), <a href="https://www.theverge.com/2019/10/21/20924886/alexa-google-home-security-vulnerability-srlabs-phishing-eavesdropping"
+    target="_blank" rel="noopener">attackers were able to eavesdrop on user conversations</a>
+    that occurred near Alexa / Google Home devices.
+  tourContent:
+    introduced:
+    - >
+      The risk of Insecure Integrated Components is introduced in the application
+      and agent/plugin components, specifically through integrations that permit
+      manipulation of inputs or outputs.
+    exposed:
+    - >
+      This risk is exposed within the application or agent/plugin components, if
+      attackers exploit the security vulnerability to gain unauthorized model access,
+      insert malicious code, or compromise systems.
+    mitigated:
+    - >
+      Mitigate this risk by addressing vulnerabilities directly within the application
+      and agent/plugin components, and by enforcing strict permissions for agents
+      and plugins.
+- id: PIJ
+  title: Prompt Injection
+  shortDescription:
+  - >
+    Tricking a model to run unintended commands. In terms of impact, Prompt Injection
+    can change a model's behavior.
+  longDescription:
+  - Causing a model to execute commands “injected” inside a prompt.
+  - >
+    Prompt Injection takes advantage of the blurry boundary between “instructions”
+    and “input data” in a prompt, resulting in a change to the model’s
+    behavior. These attacks can be both direct (entered directly by the user) or
+    indirect (read from other sources such as a doc, email, or website).
+  - >
+    <a href="https://arxiv.org/pdf/2307.02483.pdf">Jailbreaks</a> are one type
+    of Prompt Injection attack, causing the model to behave in ways that they’ve
+    been trained to avoid, such as outputting unsafe content or leaking personally
+    identifiable information.  These are well-known vulnerabilities such as "ignore
+    your previous instructions" or “Do Anything Now” (DAN).
+  - >
+    Aside from jailbreaks, <a href="https://arxiv.org/pdf/2302.12173.pdf">Prompt
+    Injections</a> generally cause the LLM to execute malicious “injected”
+    instructions as part of data that were not meant to be executed by the LLM.
+    The blast radius of such attacks can become much bigger in the presence of
+    other risks such as <a href="#IIC">Insecure Integrated Component</a> and
+    <a href="#RA">Rogue Actions</a>.
+  - >
+    With foundation models becoming multi-modal, multi-modal prompt injection has
+    also become possible. These attacks use injection inputs other than text to
+    trigger the intended model behavior.
+  personas:
+  - personaModelCreator
+  - personaModelConsumer
+  controls:
+  - controlInputValidationAndSanitization
+  - controlAdversarialTrainingAndTesting
+  - controlOutputValidationAndSanitization
+  examples:
+  - >
+    An example of indirect Prompt Injection was performed by <a href="https://arxiv.org/abs/2302.12173"
+    target="_blank" rel="noopener">planting malicious data inside a resource
+    fed into the LLM’s prompt</a>. In another example, a <a href="https://simonwillison.net/2023/Oct/14/multi-modal-prompt-injection/"
+    target="_blank" rel="noopener">multi-modal prompt injection image attacks
+    against GPT-4V</a> showed that images can contain text that triggers a Prompt
+    Injection attack when the model is asked to describe the image.
+  tourContent:
+    introduced:
+    - >
+      Prompt Injection is an inherent risk in AI models, because of the potential
+      confusion between instructions and input data.
+    exposed:
+    - >
+      This risk is exposed during model usage, specifically within the model input
+      handling and model components. Attackers may inject commands within prompts,
+      potentially causing unintended model actions.
+    mitigated:
+    - >
+      Mitigation involves robust filtering and processing of inputs and outputs.
+      Additionally, thorough training, tuning, and evaluation processes help fortify
+      the model against prompt injection attacks.
+- id: MEV
+  title: Model Evasion
+  shortDescription:
+  - >
+    Changes to a prompt input to cause the model to produce incorrect inferences.
+    Model Evasion can lead to reputational, legal, security, and privacy risks.
+  longDescription:
+  - >
+    Causing a model to produce incorrect inferences by slightly perturbing the
+    prompt input.
+  - >
+    Model Evasion can result in reputational or legal challenges and trigger other
+    downstream risks, such as to security or privacy systems.
+  - >
+    A classic example is placing stickers on a stop sign to obscure the visual
+    inputs to model piloting a self-driving car. Because of the change to the
+    typical visual presentation of the sign, the model might not correctly infer
+    its presence. Similarly, normal wear and tear on a stop sign could lead to
+    misidentification if the model is not trained on images of signs in varying
+    degrees of disrepair.
+  - >
+    In some cases, an attacker might gain clues about how to perturb inputs by discovering
+    the underlying foundation model’s family, i.e., by knowing the particular
+    architecture and evolution of a specific model. In other situations, an attacker
+    might repeatedly probe the model (see <a href="#MRE">Model Reverse Engineering</a>)
+    to figure out inference patterns in order to craft examples that evade those
+    inferences. Adversarial examples might be constructed by perturbations to inputs
+    that will provide the output the attacker wants while looking unaltered otherwise.
+    This could be used, for example, for evading a classifier that serves as an
+    important safeguard.
+  - >
+    Not all examples of model evasion attacks are necessarily visible to the naked
+    eye. The inputs might be perturbed in such a way to appear unaltered, but still
+    produce the output the attacker wants. For example, a homoglyph attack involves
+    slight changes to typefaces that the human eye doesn’t perceive as a different
+    letter, but could trigger unexpected inferences in the mode. Another example
+    could be sending an image in the prompt but using steganography to encode text
+    within the image pixels. This text would be part of the prompt for the LLM,
+    but the user won’t see it.
+  personas:
+  - personaModelCreator
+  - personaModelConsumer
+  controls:
+  - controlAdversarialTrainingAndTesting
+  examples:
+  - >
+    Adversarial images have been used to <a href="https://spectrum.ieee.org/slight-street-sign-modifications-can-fool-machine-learning-algorithms"
+    target="_blank" rel="noopener">modify street signs to confuse self-driving
+    cars</a>.
+  tourContent:
+    introduced:
+    - >
+      Model Evasion is an inherent risk in AI models, as their core functionality
+      relies on distinguishing between inputs to trigger specific inferences.
+    exposed:
+    - This risk is exposed within the model component itself during its usage.
+    mitigated:
+    - >
+      Mitigation occurs in the training, tuning, and evaluation phases, where robust
+      models can be developed using extensive and diverse data to better withstand
+      such attacks.
+- id: SDD
+  title: Sensitive Data Disclosure
+  shortDescription:
+  - >
+    Disclosure of sensitive data by the model. Sensitive Data Disclosure poses
+    a threat to user privacy, organizational reputation, and intellectual property.
+  longDescription:
+  - Disclosure of private or confidential data through querying of the model.
+  - >
+    This data might include memorized training/tuning data, user chat history,
+    and confidential data in the prompt preamble. This is a risk to user privacy,
+    organizations reputation, and intellectual property.
+  - >
+    Sensitive information is generally disclosed in two ways: leakage of user
+    query data (affecting user input, model output, and data that passes through
+    integrated plugins) and leakage of training, tuning, and prompt preamble data.
+  - - >
+      <strong>Leakage of user query data:</strong> This is similar to the traditional
+      scenario in which a web query that is leaked may disclose potentially sensitive
+      information about the author of the web query. LLM prompts, however, can
+      be much longer than a typical web query, such as when asking the LLM to rewrite
+      an email or optimize code, increasing the risk that this sensitive data poses.
+      An application integrated with a model might also retain logs of model queries
+      and responses, including information from integrated plugins that could have
+      sensitive data (for example, information retrieved from a calendar app integration).
+      Additionally, generative AI applications sometimes retain user queries and
+      responses for continuous learning, with a risk of leakage if there are vulnerabilities
+      in data storage.
+    - >
+      <strong>Leakage of training, tuning, or prompt preamble data:</strong> Refers
+      to revealing a part of the data that was used to train, tune, or prompt the
+      model. For example, a model that has not been tested for memorization might
+      reveal names, addresses, or other sensitive information from datasets.
+  personas:
+  - personaModelCreator
+  - personaModelConsumer
+  controls:
+  - controlPrivacyEnhancingTechnologies
+  - controlUserDataManagement
+  - controlOutputValidationAndSanitization
+  examples:
+  - >
+    One study showed that <a href="https://arxiv.org/abs/2210.17546" target="_blank"
+    rel="noopener">recitation checkers that scan for verbatim repetition of training
+    data</a> may be insufficient.
+  - >
+    An example of <a href="https://arxiv.org/pdf/1610.05820.pdf" target="_blank"
+    rel="noopener">membership inference attacks</a> showed the possibility of
+    inferring whether a specific user or data point was used to train or tune the
+    model.
+  tourContent:
+    introduced:
+    - >
+      The risk of Sensitive Data Disclosure is introduced in several components.
+      It can also be inherent to models due to their non-deterministic nature.
+      This risk is amplified by data handling practices that fail to filter sensitive
+      information, or by training processes that neglect to evaluate the model's
+      potential for disclosure.
+    exposed:
+    - >
+      This risk is exposed within the model itself, when it inadvertently reveals
+      sensitive data it shouldn't.
+    mitigated:
+    - >
+      Mitigate sensitive data disclosure by: filtering model outputs, rigorously
+      testing the model during training, tuning, and evaluation, and removing or
+      labeling sensitive data during sourcing, filtering, and processing before
+      it's used for training.
+- id: ISD
+  title: Inferred Sensitive Data
+  shortDescription:
+  - >
+    Model inferring personal information not contained in training data or inputs.
+    Inferred Sensitive Data may be considered a data privacy incident.
+  longDescription:
+  - >
+    Models inferring sensitive information about people that is not contained in
+    the model’s training data.
+  - >
+    Inferred information that turns out to be true, even if produced as part of
+    a hallucination, can be considered a data privacy incident, whereas the same
+    information when false would be treated as a factuality issue.
+  - >
+    For example, a model may be able to infer information about people (gender,
+    political affiliation, or sexual orientation) based on their inputs and responses
+    from integrated plugins, such as a social media plugin that accesses a public
+    account’s liked pages or followed accounts. Though the data used for inference
+    may be public, this type of inference poses two related risks: that a user
+    may be alarmed if a model infers sensitive data about them, and that one user
+    may use a model to infer sensitive data about someone else.
+  - >
+    This risk differs from <a href="#SDD">Sensitive Data Disclosure</a> which involves
+    sensitive data specifically from training, tuning or prompt data.
+  personas:
+  - personaModelCreator
+  - personaModelConsumer
+  controls:
+  - controlTrainingDataManagement
+  - controlOutputValidationAndSanitization
+  examples:
+  - >
+    Examples include papers on <a href="https://osf.io/preprints/psyarxiv/hv28a"
+    target="_blank" rel="noopener">AI inferences about sexual orientation</a>
+    or <a href="https://confilegal.com/wp-content/uploads/2016/11/ESTUDIO-UNIVERSIDAD-DE-JIAO-TONG-SHANGHAI.pdf">criminal
+    record from faces</a>.
+  tourContent:
+    introduced:
+    - >
+      The risk of Inferred Sensitive Data is introduced in several components. It's
+      inherent to models due to their non-deterministic nature and is amplified
+      by inadequate data handling practices that fail to filter sensitive information.
+      It can also be due to training processes that neglect to evaluate the model's
+      potential for sensitive inferences.
+    exposed:
+    - >
+      This risk is exposed within the model when it generates a response containing
+      inferred sensitive data that it shouldn't.
+    mitigated:
+    - >
+      Mitigation is multi-pronged: filtering model outputs to prevent revealing
+      inferred sensitive data, rigorously testing the model during training, tuning,
+      and evaluation to prevent sensitive inferences, and proactively removing
+      or labeling data that could lead to such inferences during sourcing, filtering,
+      and processing before training.
+- id: IMO
+  title: Insecure Model Output
+  shortDescription:
+  - >
+    Unvalidated model output passed to the end user. Insecure Model Output poses
+    risks to organizational reputation, security, and user safety.
+  longDescription:
+  - >
+    Model output that is not appropriately validated, rewritten, or formatted before
+    being passed to downstream systems or the user.
+  - >
+    Whether accidentally triggered or actively exploited, Insecure Model Output
+    poses risks to organizational reputation, security, and user safety.
+  - >
+    For example, a user who asks an LLM to generate an email for their business’s
+    promotion would be harmed if the model produces text that unexpectedly includes
+    a link to a URL that delivers malware. Alternatively, a malicious actor could
+    intentionally trigger insecure content, such as requesting the LLM to produce
+    a phishing email based on specific details about the target.
+  personas:
+  - personaModelConsumer
+  controls:
+  - controlOutputValidationAndSanitization
+  examples:
+  - >
+    <a href="https://www.theregister.com/2024/03/28/ai_bots_hallucinate_software_packages/"
+    target="_blank" rel="noopener">Attackers can compromise users by creating
+    fake malicious packages with names inspired by LLM hallucinations</a>.
+  tourContent:
+    introduced:
+    - >
+      The risk of Insecure Model Output is inherent to AI models due to their non-deterministic
+      nature, which can lead to unexpected and a potentially harmful outputs.
+    exposed:
+    - >
+      This risk is exposed within the model itself during usage, either through
+      accidental triggers or deliberate exploitation.
+    mitigated:
+    - >
+      Mitigation includes robust model validation and sanitization processes within
+      the model output handling component to screen and filter for insecure responses.
+- id: RA
+  title: Rogue Actions
+  shortDescription:
+  - >
+    Unintentional model-based actions executed via extensions. Rogue Actions can
+    create a cascading, risk to organizational reputation, user trust, security,
+    and safety.
+  longDescription:
+  - >
+    Unintended actions executed by a model-based agent via extensions, whether
+    accidental or malicious.
+  - >
+    Given the projected ability for advanced generative AI models to not only
+    understand their environment, but also to initiate actions with varying levels
+    of autonomy, Rogue Actions have the potential to become a serious risk to organizational
+    reputation, user trust, security, and safety.
+  - - >
+      <strong>Accidental rogue actions:</strong> This risk could be due to mistakes
+      in task planning, reasoning, or environment sensing, and might be exacerbated
+      by the inherent variability in LLM responses. Prompt engineering shows the
+      spacing and ordering of examples can have a significant impact on the response,
+      so varying input (even when not maliciously planted) could result in unexpected
+      response or actions when integrated with tools and services.
+    - >
+      <strong>Malicious actions:</strong> This risk could include manipulating
+      model output using attacks such as prompt injection, poisoning, or evasion.
+  - >
+    Rogue Actions are related to <a href="#IIC">Insecure Integrated Components</a>,
+    but differ by the degree of model functionality or agency. The model having
+    <strong>excessive functionality or agency</strong> available to it for the
+    purpose of assisting the user (e.g. excessive ability to access plugins or
+    functionality in plugins) increases the risk and blast radius of such accidental
+    or malicious Rogue Actions when compared to Insecure Integrated Components.
+  personas:
+  - personaModelConsumer
+  controls:
+  - controlAgentPluginPermissions
+  - controlAgentPluginUserControl
+  - controlOutputValidationAndSanitization
+  examples:
+  - >
+    An attack on ChatGPT plugins was described in <a href="https://embracethered.com/blog/posts/2023/chatgpt-plugin-vulns-chat-with-code/"
+    target="_blank" rel="noopener">Plugin Vulnerabilities: Visit a Website and
+    Have Your Source Code Stolen</a>.
+  tourContent:
+    introduced:
+    - >
+      The risk of Rogue Actions is introduced when agents or plugins are integrated
+      into an AI system, expanding the potential scope of actions that model output
+      can trigger.
+    exposed:
+    - >
+      This vulnerability is exposed during application usage, when model outputs
+      inadvertently trigger unintended actions in another extension.
+    mitigated:
+    - >
+      Mitigation involves model output handling and granting minimal permissions
+      to agents and plugins. Involving humans in the scoping process may be necessary
+      for added oversight and control.

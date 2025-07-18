@@ -1,0 +1,26 @@
+{
+  "$id": "personas.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "title": {"type": "string"},
+    "description": {"$ref": "saif.schema.json#/definitions/utils/text"},
+    "personas": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/persona"}
+    }
+  },
+  "definitions": {
+    "persona": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["personaModelCreator", "personaModelConsumer"]
+        },
+        "title": {"type": "string"},
+        "description": {"$ref": "saif.schema.json#/definitions/utils/text"}
+      }
+    }
+  }
+}

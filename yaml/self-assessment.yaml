@@ -1,0 +1,256 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+selfAssessment:
+  title: Risk Self Assessment
+  description:
+    - Every organization and AI implementation is unique. We developed this self-assessment for security practitioners, to help identify which AI risks may be most relevant to you.
+    - Use this assessment to start conversations and guide further research.
+  personas:
+    multipleChoice: true
+    text:
+      - Which of the following best describes your organization’s use of Generative AI models? You may select more than one option.
+    answers:
+      - label: personaModelCreator
+        value: 1
+      - label: personaModelConsumer
+        value: 2
+  questions:
+    - id: Q1
+      text:
+        - Do you have robust management of all training, tuning, or evaluation data used with your models to ensure that sensitive, unauthorized, or malicious data does not enter your models?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+      risks:
+        - UTD
+        - ISD
+      relevance:
+        - No
+        - Maybe
+    - id: Q2
+      text:
+        - Are you able to detect, remove, and remediate malicious or accidental changes in your training, tuning, or evaluation data?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+      risks:
+        - DP
+      relevance:
+        - No
+        - Maybe
+    - id: Q3
+      text:
+        - Is any sensitive user data used in training, tuning, or evaluating your AI models?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+      risks:
+        - SDD
+      relevance:
+        - Yes
+        - Maybe
+    - id: Q4
+      text:
+        - Do you have robust management of all user data that results from your Generative AI applications to ensure that user data is stored, processed, and used in accordance with user consents and user policies?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+        - personaModelConsumer
+      risks:
+        - SDD
+        - EDH
+      relevance:
+        - No
+        - Maybe
+    - id: Q5
+      text:
+        - Do you have a complete inventory of all models, datasets (for training, tuning, or evaluation), and related ML artifacts (such as code)?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+        - personaModelConsumer
+      risks:
+        - DP
+        - MST
+        - MXF
+      relevance:
+        - No
+        - Maybe
+    - id: Q6
+      text:
+        - Do you have robust access controls on all models, datasets, and related ML artifacts to minimize, detect, and prevent unauthorized reading or copying?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+        - personaModelConsumer
+      risks:
+        - DP
+        - MXF
+        - MST
+      relevance:
+        - No
+        - Maybe
+    - id: Q7
+      text:
+        - Are you able to ensure that all data, models, and code used to train, tune, or evaluate models cannot be tampered without detection during model development and during deployment?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+      risks:
+        - DP
+        - MST
+      relevance:
+        - No
+        - Maybe
+    - id: Q8
+      text:
+        - Are the frameworks, libraries, software systems, and hardware components used in the development and deployment of your models analyzed for and protected against security vulnerabilities?
+      answers:
+        - label: Yes
+          value: 1
+        - label: "No"
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+      risks:
+        - DP
+        - MXF
+        - MDT
+        - MST
+      relevance:
+        - No
+        - Maybe
+    - id: Q9
+      text:
+        - Do you protect your Generative AI applications and models against large-scale malicious queries from user accounts, devices, or via APIs?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+        - personaModelConsumer
+      risks:
+        - DMS
+        - MRE
+      relevance:
+        - No
+        - Maybe
+    - id: Q10
+      text:
+        - Are you using secure-by-default designs and coding frameworks in applications integrated with Generative AI applications?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+        - personaModelConsumer
+      risks:
+        - IIC
+      relevance:
+        - No
+        - Maybe
+    - id: Q11
+      text:
+        - Do you perform adversarial testing and training on models and Generative AI applications to improve resistance to adversarial inputs?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+        - personaModelConsumer
+      risks:
+        - IMO
+        - MEV
+        - PIJ
+        - SDD
+        - ISD
+      relevance:
+        - No
+        - Maybe
+    - id: Q12
+      text:
+        - Do you build or deploy Generative AI powered agents or tools that can take actions on behalf of internal or external users?
+      answers:
+        - label: Yes
+          value: 1
+        - label: No
+          value: 2
+        - label: Maybe
+          value: 3
+      personas:
+        - personaModelCreator
+        - personaModelConsumer
+      risks:
+        - RA
+        - PIJ
+      relevance:
+        - Yes
+        - Maybe

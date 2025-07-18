@@ -1,0 +1,94 @@
+{
+  "$id": "controls.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "title": {"type": "string"},
+    "description": {"$ref": "saif.schema.json#/definitions/utils/text"},
+    "categories": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/category"}
+    },
+    "controls": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/control"}
+    }
+  },
+  "definitions": {
+    "category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["controlsData", "controlsInfrastructure", "controlsModel", "controlsApplication", "controlsAssurance", "controlsGovernance"]
+        },
+        "title": {"type": "string"}
+      }
+    },
+    "control": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": [
+            "controlAdversarialTrainingAndTesting",
+            "controlAgentPluginPermissions",
+            "controlAgentPluginUserControl",
+            "controlApplicationAccessManagement",
+            "controlIncidentResponseManagement",
+            "controlInputValidationAndSanitization",
+            "controlInternalPoliciesAndEducation",
+            "controlModelAndDataAccessControls",
+            "controlModelAndDataIntegrityManagement",
+            "controlModelAndDataInventoryManagement",
+            "controlOutputValidationAndSanitization",
+            "controlPrivacyEnhancingTechnologies",
+            "controlProductGovernance",
+            "controlRedTeaming",
+            "controlRiskGovernance",
+            "controlSecureByDefaultMLTooling",
+            "controlThreatDetection",
+            "controlTrainingDataManagement",
+            "controlTrainingDataSanitization",
+            "controlUserDataManagement",
+            "controlUserPoliciesAndEducation",
+            "controlUserTransparencyAndControls",
+            "controlVulnerabilityManagement"
+          ]
+        },
+        "title": {"type": "string"},
+        "description": {"$ref": "saif.schema.json#/definitions/utils/text"},
+        "category": {"$ref": "#/definitions/category/properties/id"},
+        "personas": {
+          "type": "array",
+          "items": {"$ref": "personas.schema.json#/definitions/persona/properties/id"}
+        },
+        "components": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {"$ref": "components.schema.json#/definitions/component/properties/id"}
+            },
+            {
+              "type": "string",
+              "enum": ["all","none"]
+            }
+          ]
+        },
+        "risks": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {"$ref": "risks.schema.json#/definitions/risk/properties/id"}
+            },
+            {
+              "type": "string",
+              "enum": ["all"]
+            }
+          ]
+        }
+      },
+      "required": ["title","description","category","personas","components","risks"]
+    }
+  }
+}

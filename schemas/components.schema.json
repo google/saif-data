@@ -1,0 +1,74 @@
+{
+  "$id": "components.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "title": {"type": "string"},
+    "description": {"$ref": "saif.schema.json#/definitions/utils/text"},
+    "categories": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/category"}
+    },
+    "components": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/component"}
+    }
+  },
+  "definitions": {
+    "category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["componentsData", "componentsInfrastructure", "componentsModel", "componentsApplication"]
+        },
+        "title": {"type": "string"},
+        "description": {"$ref": "saif.schema.json#/definitions/utils/text"}
+      }
+    },
+    "component": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": [
+            "componentDataSources",
+            "componentDataFilteringAndProcessing",
+            "componentTrainingData",
+            "componentDataStorage",
+            "componentModelFrameworksAndCode",
+            "componentModelEvaluation",
+            "componentTrainingTuning",
+            "componentModelStorage",
+            "componentModelServing",
+            "componentTheModel",
+            "componentInputHandling",
+            "componentOutputHandling",
+            "componentApplication",
+            "componentAgentPlugin"
+          ]
+        },
+        "title": {"type": "string"},
+        "description": {"$ref": "saif.schema.json#/definitions/utils/text"},
+        "category": { 
+          "$ref": "#/definitions/category/properties/id"
+        },
+        "edges": {"$ref": "#/definitions/edges"}
+      },
+      "required": ["id", "title", "category", "edges"] 
+    },
+    "edges": {
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/component/properties/id"}
+        },
+        "from": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/component/properties/id"}
+        }
+      }
+    }
+  }
+}

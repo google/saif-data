@@ -1,0 +1,55 @@
+{
+  "$id": "risks.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "title": {"type": "string"},
+    "description": {"$ref": "saif.schema.json#/definitions/utils/text"},
+    "risks": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/risk"}
+    }
+  },
+  "definitions": {
+    "risk": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["DMS", "DP", "EDH", "IIC", "IMO", "ISD", "MDT", "MEV", "MRE", "MST", "MXF", "PIJ", "RA", "SDD", "UTD"]
+        },
+        "title": {"type": "string"},
+        "shortDescription": {"$ref": "saif.schema.json#/definitions/utils/text"},
+        "longDescription": {"$ref": "saif.schema.json#/definitions/utils/text"},
+        "personas": {
+          "type": "array",
+          "items": {"$ref": "personas.schema.json#/definitions/persona/properties/id"}
+        },
+        "tourContent": {
+          "type": "object",
+          "properties": {
+            "introduced": {"$ref": "saif.schema.json#/definitions/utils/text"},
+            "exposed": {"$ref": "saif.schema.json#/definitions/utils/text"},
+            "mitigated": {"$ref": "saif.schema.json#/definitions/utils/text"}
+          }
+        },
+        "controls": {
+          "type": "array",
+          "items": {"$ref": "controls.schema.json#/definitions/control/properties/id"}
+        },
+        "examples": {"$ref": "saif.schema.json#/definitions/utils/text"},
+        "relevantQuestions": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "description": {"$ref": "saif.schema.json#/definitions/utils/text"}
+      }
+    }
+  }
+}
