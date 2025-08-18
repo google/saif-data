@@ -9,7 +9,7 @@ All contributions to this framework follow a standard workflow. Specific file ch
 1.  **Fork & Branch**: Fork the repository to your own GitHub account and create a new, descriptive branch for your work (e.g., `feature/add-new-risk-xyz`).
     ```bash
     # Clone your fork to your local machine
-    git clone https://github.com/your-username/saif-risk-map.git
+    git clone https://github.com/your-username/saif-data.git
     cd saif-risk-map
 
     # Create a new branch
