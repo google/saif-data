@@ -6,7 +6,13 @@ Welcome to the **Google Secure AI Framework (SAIF) Risk Map**. This project prov
 
 ## About The Project
 
-Traditional software security practices are not always sufficient for AI systems. The introduction of large datasets, complex training processes, and new user interaction models creates a different set of vulnerabilities. The SAIF Risk Map addresses this by providing a structured map of the AI security landscape, broken down into four key areas:
+Traditional software security practices are not always sufficient for AI systems. The introduction of large datasets, complex training processes, and new user interaction models creates a different set of vulnerabilities. 
+
+The SAIF Risk Map addresses this by providing a structured map of the AI security landscape.
+
+![SAIF Risk Map](./docs/images/risk-map.png)
+
+The Risk Map is broken down into four key areas:
 
 * **Components**: The fundamental building blocks of an AI system, from data sources to the final application.
 * **Risks**: The potential security threats that can affect these components, such as Data Poisoning or Model Evasion.
@@ -38,7 +44,7 @@ The framework is organized into a set of YAML files for easy reading and JSON sc
 You can use these files to:
 * **Learn**: Read the `.yaml` files to understand the landscape of AI security risks.
 * **Assess**: Use the framework as a guide for security reviews of your AI projects.
-* **Build**: Leverage the `.schema.json` files to expand the framework to address your organization's risk management and governance needs.
+* **Build**: Leverage the `.schema.json` files to expand the framework to address your organization's risk management and governance needs. <br>See [docs/developing.md](./docs/developing.md) for more details. 
 
 ## Background
 Building and using AI systems involves many potential risks. We created the Securing AI Framework to help manage these risks by tackling a few common problems. The industry needed:
