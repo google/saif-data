@@ -44,10 +44,11 @@ The framework is organized into a set of YAML files for easy reading and JSON sc
 You can use these files to:
 * **Learn**: Read the `.yaml` files to understand the landscape of AI security risks.
 * **Assess**: Use the framework as a guide for security reviews of your AI projects.
-* **Build**: Leverage the `.schema.json` files to expand the framework to address your organization's risk management and governance needs. <br>See [docs/developing.md](./docs/developing.md) for more details. 
+* **Build**: Leverage the `.schema.json` files to expand the framework to address your organization's risk management and governance needs.
+   * See [docs/developing.md](./docs/developing.md) for more details. 
 
 ## Background
-Building and using AI systems involves many potential risks. We created the Securing AI Framework to help manage these risks by tackling a few common problems. The industry needed:
+Building and using AI systems involves many potential risks. We created the Securing AI Framework to help manage these risks by tackling several foundational challenges. The industry needed:
 
 * **A common language:** Teams often used different words for similar risks. For example, the technique of tricking a large language model into unintended behavior through carefully crafted inputs might be described as prompt injection, instruction hijacking, prompt hacking, or sometimes broadly jailbreaking. The threat of intentionally corrupting training data to compromise the model could be called data poisoning, training data attacks, backdoor injection via data, or data contamination. This confusion made it hard to track, discuss, and effectively fix risks consistently. We needed shared terms everyone could understand.
 
@@ -57,7 +58,7 @@ Building and using AI systems involves many potential risks. We created the Secu
 
 To address these needs, we developed the Securing AI Framework Map, with supporting documentation about the components, risks, and controls. 
 
-To help practitioners more easily navigate the Map and documentation, we also created the Securing AI Risk Assessment, which gives users personalized risk information after the answer a few questions. 
+To help practitioners more easily navigate the Map and documentation, we also created the Securing AI Risk Assessment, which gives users personalized risk information after they answer a few questions. 
 
 ## Design
 The Securing AI Map structures the AI development lifecycle into four primary groupings of components, providing a standardized view of the end-to-end process: **Data, Infrastructure, Model,** and **Application**. Practitioners can understand the processes and components involved in creating and using AI models, and more specifically, which risks are involved in the lifecycle at which stage. 
